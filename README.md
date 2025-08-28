@@ -1,3 +1,5 @@
+# FULLY MADE WITH AI
+
 # Travel Time Estimator
 
 A modern web application that estimates travel times between two locations using both driving and public transit options. Built with Flask and Google Maps API.
