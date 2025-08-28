@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Time Estimator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-route"></i> Travel Time Estimator</h1>
+            <p>Get estimated travel times by car and public transit</p>
+            
+            <div class="navigation-tabs">
+                <button id="recommendations-tab" class="nav-tab active">
+                    <i class="fas fa-star"></i> Nearby
+                </button>
+                <button id="city-search-tab" class="nav-tab">
+                    <i class="fas fa-city"></i> City Search
+                </button>
+                <button id="calculator-tab" class="nav-tab">
+                    <i class="fas fa-calculator"></i> Calculator
+                </button>
+            </div>
+        </header>
+
+        <!-- Recommendations Section -->
+        <div id="recommendations-section" class="section active">
+            <div class="recommendations-header">
+                <h2>Travel Recommendations</h2>
+                <p id="recommendations-subtitle">Discovering amazing places near you...</p>
+            </div>
+            
+            <div id="recommendations-loading" class="loading" style="display: none;">
+                <i class="fas fa-spinner fa-spin"></i>
+                <span>Finding amazing places for you...</span>
+            </div>
+            
+            <div id="recommendations-container" class="recommendations-grid">
+                <!-- Recommendations will be populated here -->
+            </div>
+        </div>
+
+        <!-- City Search Section -->
+        <div id="city-search-section" class="section">
+            <div class="city-search-header">
+                <h2>Explore City Attractions</h2>
+                <p>Search for top-rated attractions in any city or province worldwide</p>
+            </div>
+            
+            <div class="city-search-container">
+                <div class="search-input-container">
+                    <input type="text" id="city-search-input" placeholder="Enter city name (e.g., Paris, Tokyo, New York)">
+                    <button id="search-city-btn" class="search-city-btn">
+                        <i class="fas fa-search"></i> Search Attractions
+                    </button>
+                </div>
+                
+                <div id="city-search-loading" class="loading" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <span>Searching for amazing attractions...</span>
+                </div>
+                
+                <div id="city-search-results" class="city-search-results">
+                    <div class="search-placeholder">
+                        <i class="fas fa-city search-placeholder-icon"></i>
+                        <h3>Discover Amazing Places</h3>
+                        <p>Enter a city name above to explore its top-rated attractions, landmarks, and must-visit places.</p>
+                    </div>
+                </div>
+                
+                <div id="city-search-error" class="error-message" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Travel Calculator Section -->
+        <div id="calculator-section" class="section">
+            <div class="main-content">
+                <div class="controls-panel">
+                    <div class="input-group">
+                        <label for="origin">
+                            <i class="fas fa-map-marker-alt"></i> From
+                        </label>
+                        <input type="text" id="origin" placeholder="Enter starting location">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="destination">
+                            <i class="fas fa-flag-checkered"></i> To
+                        </label>
+                        <input type="text" id="destination" placeholder="Enter destination">
+                    </div>
+
+                    <div class="button-group">
+                        <button id="calculate-btn" class="calculate-btn">
+                            <i class="fas fa-calculator"></i> Calculate Travel Time
+                        </button>
+                        <button id="reset-btn" class="reset-btn">
+                            <i class="fas fa-undo"></i> Reset
+                        </button>
+                    </div>
+
+                    <div class="route-options" style="display: none;" id="route-options">
+                        <div class="input-group">
+                            <label for="attraction-distance">
+                                <i class="fas fa-map-pin"></i> Show attractions within (km)
+                            </label>
+                            <input type="number" id="attraction-distance" placeholder="50" min="1" max="200" value="50">
+                            <small>Popular places in the middle of your route (default: 50km)</small>
+                        </div>
+                        
+                        <button id="find-attractions-btn" class="find-attractions-btn">
+                            <i class="fas fa-map-marked-alt"></i> Find attractions in the middle of your route
+                        </button>
+                    </div>
+
+                    <div id="results" class="results-container" style="display: none;">
+                        <div class="result-card driving">
+                            <div class="result-header">
+                                <i class="fas fa-car"></i>
+                                <h3>Driving</h3>
+                            </div>
+                            <div class="result-content">
+                                <div class="time" id="driving-time">--</div>
+                                <div class="distance" id="driving-distance">--</div>
+                            </div>
+                        </div>
+
+                        <div class="result-card transit">
+                            <div class="result-header">
+                                <i class="fas fa-bus"></i>
+                                <h3>Public Transit</h3>
+                            </div>
+                            <div class="result-content">
+                                <div class="time" id="transit-time">--</div>
+                                <div class="distance" id="transit-distance">--</div>
+                                <div class="transit-times" id="transit-schedule" style="display: none;">
+                                    <small>
+                                        Departure: <span id="departure-time">--</span> | 
+                                        Arrival: <span id="arrival-time">--</span>
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="loading" class="loading" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <span>Calculating routes...</span>
+                    </div>
+
+                    <div id="error" class="error-message" style="display: none;"></div>
+                </div>
+
+                <div class="map-container">
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Pass API key to JavaScript
+        window.GOOGLE_MAPS_API_KEY = '{{ api_key }}';
+    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key={{ api_key }}&libraries=places&callback=initMap">
+    </script>
+</body>
+</html>
